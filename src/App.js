@@ -1,23 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [secret, setSecret] = useState(1234)
+  // TODO: should guesses be a set? can a user do the same guess twice in one game
+  const [guesses, setGuesses] = useState([])
+
+  function guess(ev) {
+    let ng = guesses.concat(ev.target.value);
+    ev.target.value = "";
+    console.log("ng", ng);
+    setGuesses(ng);
+  }
+
+  function keyPress(ev){
+    if (ev.key == "Enter") {
+      guess(ev);
+    }
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>4 digits</h1>
+      <input type="text" 
+             onKeyPress={keyPress}/>
+      <p>Guesses</p>
+      <ol>
+      {guesses.map((value, index) => {
+        return <li key={index}>{value}</li>
+      })}
+    </ol>
+
     </div>
   );
 }
