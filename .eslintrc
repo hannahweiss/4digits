@@ -2,7 +2,7 @@
     // should this be single quotes?
     "parser": "babel-eslint",
     "rules": {
-        "no-unused-vars": ["warning", {
+        "no-unused-vars": [1, {
             "varsIgnorePattern": "^_"
         }]
     }
