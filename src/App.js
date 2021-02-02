@@ -2,22 +2,39 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [secret, setSecret] = useState(1234)
+  const [secret, setSecret] = useState(1234);
   // TODO: should guesses be a set? can a user do the same guess twice in one game
-  const [guesses, setGuesses] = useState([])
-  const [text, setText] = useState("")
+  const [guesses, setGuesses] = useState([]);
+  const [text, setText] = useState("");
+  const [lives, setLives] = useState(8);
+
+  function check_game_over(text){
+    if (text == secret){
+      alert("You Win!");
+      reset();
+    }
+    else if (guesses.length == 8){
+      alert("Game Over, You Lose");
+      reset();
+    }
+    else {
+      setLives(lives - 1);
+    }
+  }
 
   function guess(ev) {
     let valid_guess = validateGuess(text);
+    setText("");
     if (valid_guess){
       let ng = guesses.concat(text);
       // console.log(validateGuess(text));
-      setText("");
       console.log("ng", ng);
       setGuesses(ng);
+      check_game_over(text);
     }
     else {
       console.log("invalid guess");
+      alert("Guesses must be composed of 4 unigue digits")
     }
   }
 
@@ -55,6 +72,7 @@ function App() {
   function reset(){
     setVal();
     setGuesses([]);
+    setLives(8);
   }
 
   function setVal(){
@@ -68,8 +86,30 @@ function App() {
       }
     }
 
+    setSecret(val)
     console.log(val)
 
+  }
+
+  function getResult(text){
+    let guess_text = text.split("")
+    let actual_text = secret.split("")
+
+    var i;
+    let wrong_place = 0;
+    let correct_place = 0;
+    for (i = 0; i < 4; i++){
+      if (guess_text[i] == actual_text[i]){
+        correct_place += 1;
+      }
+      else if (actual_text.includes(guess_text[i])){
+        console.log("in else")
+        console.log(guess_text[i])
+        console.log(actual_text)
+        wrong_place += 1;
+      }
+    }
+    return correct_place + " bulls; " + wrong_place + " cows";
   }
 
   useEffect(() => {
@@ -80,6 +120,9 @@ function App() {
   return (
     <div className="App">
       <h1>4 digits</h1>
+      <h2>
+        {lives} Lives left!
+      </h2>
       <input type="text" 
              onKeyPress={keyPress}
              onChange={updateText}
@@ -96,7 +139,7 @@ function App() {
       <p>Guesses</p>
       <ol>
       {guesses.map((value, index) => {
-        return <li key={index}>{value}</li>
+        return <li key={index}>{value + " " + getResult(value)}</li>
       })}
     </ol>
 
