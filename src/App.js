@@ -6,9 +6,9 @@ function App() {
   const [guesses, setGuesses] = useState([]);
   const [text, setText] = useState("");
   const [lives, setLives] = useState(8);
-  const [message, setMessage] = useState("Game over, you lost")
+  const [message, setMessage] = useState("Game over, you lost");
 
-  // called each time the user guesses to check if they won or 
+  // called each time the user guesses to check if they won or
   // ran out of lives
   function check_game_over(text) {
     if (text == secret) {
@@ -31,14 +31,16 @@ function App() {
       check_game_over(text);
     } else {
       console.log("invalid guess");
-      alert("Guesses must be composed of 4 unigue digits and be unique from previous guesses.");
+      alert(
+        "Guesses must be composed of 4 unigue digits and be unique from previous guesses."
+      );
     }
   }
 
   // ensures that a guess is 4 unique digits and has not been
   // already guessed
   function validateGuess(guess) {
-    if (guesses.includes(guess)){
+    if (guesses.includes(guess)) {
       return false;
     }
     let valid_guess_digit = new Set([
@@ -85,7 +87,7 @@ function App() {
     setVal();
     setGuesses([]);
     setLives(8);
-    setMessage("Game over, you lost")
+    setMessage("Game over, you lost");
   }
 
   function setVal() {
@@ -132,10 +134,8 @@ function App() {
   function GameOver() {
     return (
       <div>
-        <p>
-          {message}
-        </p>
-        <button onClick={reset}>Reset Game</button>
+        <p>{message}</p>
+        <button className="button" onClick={reset}>Reset Game</button>
       </div>
     );
   }
@@ -144,40 +144,44 @@ function App() {
 
   if (lives > 0) {
     body = (
-      <div>
-        <h2>{lives} Lives left!</h2>
-        <input
-          type="text"
-          onKeyPress={keyPress}
-          onChange={updateText}
-          value={text}
-        />
-        <button className="guess-button" onClick={guess}>
-          Guess
-        </button>
-        <br />
-        <br />
-        <button onClick={reset}>Reset Game</button>
-        <p>Guesses</p>
-        <ol>
-          {guesses.map((value, index) => {
-            return <li key={index}>{value + " " + getResult(value)}</li>;
-          })}
-        </ol>
+      <div className="row">
+        <div className="column">
+          <h2>{lives} Lives left!</h2>
+          <input
+            id="input-box"
+            type="text"
+            onKeyPress={keyPress}
+            onChange={updateText}
+            value={text}
+          />
+          <button className="button" onClick={guess}>
+            Guess
+          </button>
+          <br />
+          <br />
+          <button className="button" onClick={reset}>Reset Game</button>
+        </div>
+        <div className="column">
+          <h2>Guesses</h2>
+          <ol className="guesses">
+            {guesses.map((value, index) => {
+              return <li key={index}>{value + " " + getResult(value)}</li>;
+            })}
+          </ol>
+        </div>
       </div>
     );
-  }
-  else {
+  } else {
     body = (
       <div>
-        <GameOver/>
+        <GameOver />
       </div>
-    )
+    );
   }
 
   return (
     <div className="App">
-      <h1>4 digits</h1>
+      <h1>4 Digits Game</h1>
       {body}
     </div>
   );
