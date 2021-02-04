@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 
 function App() {
   const [secret, setSecret] = useState(1234);
-  // TODO: should guesses be a set? can a user do the same guess twice in one game
   const [guesses, setGuesses] = useState([]);
   const [text, setText] = useState("");
   const [lives, setLives] = useState(8);
   const [message, setMessage] = useState("Game over, you lost")
 
+  // called each time the user guesses to check if they won or 
+  // ran out of lives
   function check_game_over(text) {
     if (text == secret) {
       setMessage("You Won!");
@@ -18,12 +19,13 @@ function App() {
     }
   }
 
+  // called when a user hits enter or selects the guess button
+  // first validates the guess and then adds it to guess list
   function guess(ev) {
     let valid_guess = validateGuess(text);
     setText("");
     if (valid_guess) {
       let ng = guesses.concat(text);
-      // console.log(validateGuess(text));
       console.log("ng", ng);
       setGuesses(ng);
       check_game_over(text);
@@ -33,6 +35,8 @@ function App() {
     }
   }
 
+  // ensures that a guess is 4 unique digits and has not been
+  // already guessed
   function validateGuess(guess) {
     if (guesses.includes(guess)){
       return false;
@@ -76,6 +80,7 @@ function App() {
     console.log(text);
   }
 
+  // resets the game back to an initial state
   function reset() {
     setVal();
     setGuesses([]);
@@ -98,6 +103,7 @@ function App() {
     console.log(val);
   }
 
+  // calculates the "bulls" and "cows" for a guess
   function getResult(text) {
     let guess_text = text.split("");
     let actual_text = secret.split("");
@@ -122,6 +128,7 @@ function App() {
     setVal();
   }, []);
 
+  // the screen that is displayed when a game is over
   function GameOver() {
     return (
       <div>
