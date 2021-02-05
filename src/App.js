@@ -7,6 +7,7 @@ function App() {
   const [text, setText] = useState("");
   const [lives, setLives] = useState(8);
   const [message, setMessage] = useState("Game over, you lost");
+  const [lastGuessInvalid, setLastGuessInvalid] = useState(false);
 
   // called each time the user guesses to check if they won or
   // ran out of lives
@@ -27,13 +28,12 @@ function App() {
     if (valid_guess) {
       let ng = guesses.concat(text);
       console.log("ng", ng);
+      setLastGuessInvalid(false);
       setGuesses(ng);
       check_game_over(text);
     } else {
       console.log("invalid guess");
-      alert(
-        "Guesses must be composed of 4 unigue digits and be unique from previous guesses."
-      );
+      setLastGuessInvalid(true);
     }
   }
 
@@ -117,9 +117,6 @@ function App() {
       if (guess_text[i] == actual_text[i]) {
         correct_place += 1;
       } else if (actual_text.includes(guess_text[i])) {
-        console.log("in else");
-        console.log(guess_text[i]);
-        console.log(actual_text);
         wrong_place += 1;
       }
     }
@@ -135,7 +132,9 @@ function App() {
     return (
       <div>
         <p>{message}</p>
-        <button className="button" onClick={reset}>Reset Game</button>
+        <button className="button" onClick={reset}>
+          Reset Game
+        </button>
       </div>
     );
   }
@@ -159,7 +158,14 @@ function App() {
           </button>
           <br />
           <br />
-          <button className="button" onClick={reset}>Reset Game</button>
+          <p className="alert">
+            {lastGuessInvalid
+              ? "Guesses must consist of 4 unique digits \n and be unique from previous guesses."
+              : " "}
+          </p>
+          <button className="button" onClick={reset}>
+            Reset Game
+          </button>
         </div>
         <div className="column">
           <h2>Guesses</h2>
